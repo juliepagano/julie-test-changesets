@@ -2,7 +2,7 @@
   "name": "julie-test-changesets",
   "version": "0.0.0",
   "description": "Julie testing changesets",
-  "main": "index.js",
+  "workspaces": ["app"],
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
