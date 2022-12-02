@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import {HelloWorld} from '@julie-test-changesets/components'
 
 import './App.css';
