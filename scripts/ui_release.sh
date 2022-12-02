@@ -21,20 +21,19 @@ function copy() {
 }
 
 function publish() {
-  echo "PUBLISH"
-  # dry_run="${1}"
-  # cmd="npm publish --access public"
-  # if [[ "${dry_run}" == "dry-run" ]]; then
-  #   cmd+=" --dry-run"
-  # fi
-  # for workspace in ${workspaces}; do
-  #   # package "app" is private so we shouldn't try to publish it.
-  #   if [[ "${workspace}" != "app" ]]; then
-  #     cd "${workspace}"
-  #     eval "${cmd}"
-  #     cd ../
-  #   fi
-  # done
+  dry_run="${1}"
+  cmd="npm publish --access public"
+  if [[ "${dry_run}" == "dry-run" ]]; then
+    cmd+=" --dry-run"
+  fi
+  for workspace in ${workspaces}; do
+    # package "app" is private so we shouldn't try to publish it.
+    if [[ "${workspace}" != "app" ]]; then
+      cd "${workspace}"
+      eval "${cmd}"
+      cd ../
+    fi
+  done
 }
 
 function checkPackage() {
@@ -74,7 +73,7 @@ function bumpVersion() {
   fi
   # upgrade the @julie-test-changesets/* dependencies on all packages
   for workspace in ${workspaces}; do
-    sed -E -i "" "s|(\"@julie-test-changesets/components/.+\": )\".+\"|\1\"\^${version}\"|" "${workspace}"/package.json
+    sed -E -i "" "s|(\"@julie-test-changesets/.+\": )\".+\"|\1\"\^${version}\"|" "${workspace}"/package.json
   done
 
   # increase the version on all packages
