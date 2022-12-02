@@ -6,7 +6,7 @@
   "main": "dist/cjs/index.js",
   "types": "dist/index.d.ts",
   "dependencies": {
-    "@julie-test-changesets/core": "*"
+    "@julie-test-changesets/core": "0.0.0"
   },
   "devDependencies": {},
   "scripts": {

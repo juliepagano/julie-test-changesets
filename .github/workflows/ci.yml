@@ -17,7 +17,54 @@ jobs:
       - uses: ./.github/actions/setup_environment
         with:
           enable_npm: true
+
+      - name: Check Tag
+        ## This step is verifying that the tag follow the semver
+        ## It is only triggered when a tag is created
+        if: ${{ github.event_name == 'push' && startsWith(github.ref_name, 'v') }}
+        run: ./scripts/release.sh --check-version "${{ github.ref_name }}"
+
+      - name: Check libraries version
+        ## This step is verifying that the version of each package is matching the tag
+        if: ${{ github.event_name == 'push' && startsWith(github.ref_name, 'v') }}
+        run: ./scripts/ui_release.sh --check-package "${{ github.ref_name }}"
+
       - name: Install UI deps
         run: cd ./ui && npm install
       - name: Build the app and all packages
         run: cd ./ui && npm run build
+      - name: store react production build
+        uses: actions/upload-artifact@v3
+        with:
+          name: ui-libs
+          path: |
+            ui/**/dist
+            !ui/node_modules
+
+  libs-release:
+    name: "libs-release"
+    needs: "build-frontend"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - uses: ./.github/actions/setup_environment
+        with:
+          enable_npm: true
+      - name: Download react build
+        uses: actions/download-artifact@v3
+        with:
+          name: ui-libs
+          path: ui
+      - name: Copy files before publishing libs
+        run: ./scripts/ui_release.sh --copy
+      - name: Publish dry-run libraries
+        if: ${{ github.event_name == 'pull_request' || github.ref_name == 'main' }}
+        run: ./scripts/ui_release.sh --publish dry-run
+      - name: Publish libraries
+        if: ${{ github.event_name == 'push' && startsWith(github.ref_name, 'v') }}
+        run: ./scripts/ui_release.sh --publish
+        env:
+          # The setup-node action writes an .npmrc file with this env variable
+          # as the placeholder for the auth token
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
