@@ -74,7 +74,7 @@ function bumpVersion() {
   fi
   # upgrade the @julie-test-changesets/* dependencies on all packages
   for workspace in ${workspaces}; do
-    sed -E -i "" "s|(\"@julie-test-changesets/components/.+\": )\".+\"|\1\"\^${version}\"|" "${workspace}"/package.json
+    sed -E -i "" "s|(\"@julie-test-changesets/.+\": )\".+\"|\1\"\^${version}\"|" "${workspace}"/package.json
   done
 
   # increase the version on all packages
