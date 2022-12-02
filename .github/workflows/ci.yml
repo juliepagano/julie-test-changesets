@@ -1,0 +1,23 @@
+name: ci
+on:
+  pull_request:
+  push:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' || github.ref_name != 'main' }}
+
+jobs:
+  build-frontend:
+    name: "build-frontend"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - uses: ./.github/actions/setup_environment
+        with:
+          enable_npm: true
+      - name: Install UI deps
+        run: cd ./ui && npm install
+      - name: Build the app and all packages
+        run: cd ./ui && npm run build
