@@ -1,0 +1,22 @@
+{
+  "name": "@julie-test-changesets/components",
+  "version": "0.0.0",
+  "description": "",
+  "module": "dist/index.js",
+  "main": "dist/cjs/index.js",
+  "types": "dist/index.d.ts",
+  "dependencies": {
+    "@julie-test-changesets/core": "*"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "clean": "rimraf dist/",
+    "build": "concurrently \"npm:build:*\"",
+    "build:cjs": "swc ./src -d dist/cjs --config-file ../.cjs.swcrc",
+    "build:esm": "swc ./src -d dist --config-file ../.swcrc",
+    "build:types": "tsc --emitDeclarationOnly --declaration --preserveWatchOutput",
+    "start": "concurrently -P \"npm:build:* -- {*}\" -- --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": ""
+}
