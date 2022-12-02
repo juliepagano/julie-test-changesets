@@ -21,20 +21,19 @@ function copy() {
 }
 
 function publish() {
-  echo "PUBLISH"
-  # dry_run="${1}"
-  # cmd="npm publish --access public"
-  # if [[ "${dry_run}" == "dry-run" ]]; then
-  #   cmd+=" --dry-run"
-  # fi
-  # for workspace in ${workspaces}; do
-  #   # package "app" is private so we shouldn't try to publish it.
-  #   if [[ "${workspace}" != "app" ]]; then
-  #     cd "${workspace}"
-  #     eval "${cmd}"
-  #     cd ../
-  #   fi
-  # done
+  dry_run="${1}"
+  cmd="npm publish --access public"
+  if [[ "${dry_run}" == "dry-run" ]]; then
+    cmd+=" --dry-run"
+  fi
+  for workspace in ${workspaces}; do
+    # package "app" is private so we shouldn't try to publish it.
+    if [[ "${workspace}" != "app" ]]; then
+      cd "${workspace}"
+      eval "${cmd}"
+      cd ../
+    fi
+  done
 }
 
 function checkPackage() {
