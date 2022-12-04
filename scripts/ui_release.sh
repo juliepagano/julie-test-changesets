@@ -89,7 +89,8 @@ function bumpVersion() {
 function snapshotVersion() {
   branch="${1}"
   sha="${2}"
-  snapshotName="0.0.0-$(echo "${branch}" | sed -E  's/.*\///')-${sha}"
+  shortSha=$(echo $sha | cut -c 1-7)
+  snapshotName="0.0.0-$(echo "${branch}" | sed -E  's/.*\///')-${shortSha}"
   echo "Creating snapshot ${snapshotName}"
   echo "${snapshotName}" > ../VERSION
   bumpVersion "${snapshotName}"
