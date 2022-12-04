@@ -74,6 +74,12 @@ jobs:
           # as the placeholder for the auth token
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+      - name: Snapshot
+        ## This step only runs for "snapshot" branches starting with "snapshot/"
+        ## We have to do this again in this job because the version change is
+        ## automated and not committed to git.
+        if: ${{ github.event_name == 'push' && startsWith(github.ref_name, 'snapshot/') }}
+        run: ./scripts/ui_release.sh --snapshot-version "${{ github.ref_name }}" "${{ github.sha }}"
       - name: Publish snapshot
         ## This step only runs for "snapshot" branches starting with "snapshot/"
         if: ${{ github.event_name == 'push' && startsWith(github.ref_name, 'snapshot/') }}
