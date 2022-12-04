@@ -72,7 +72,6 @@ function bumpVersion() {
     version="${version:1}"
   fi
   pwd
-  ls
   # upgrade the @julie-test-changesets/* dependencies on all packages
   for workspace in ${workspaces}; do
     echo "${workspace}"/package.json
