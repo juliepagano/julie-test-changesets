@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.3.0 / 2022-12-03
+
 - [BUGFIX] Try to fix makefile for github release
 
 ## 0.2.0 / 2022-12-03
