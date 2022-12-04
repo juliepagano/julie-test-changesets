@@ -3,6 +3,8 @@ VERSION               ?= $(shell cat VERSION)
 GORELEASER_PARALLEL   ?= 0
 DATE                  := $(shell date +%Y-%m-%d)
 
+export DATE
+
 .PHONY: generate-changelog
 generate-changelog:
 	$(GO) run ./scripts/generate-changelog/generate-changelog.go --version="${VERSION}"
