@@ -79,7 +79,7 @@ jobs:
         ## We have to do this again in this job because the version change is
         ## automated and not committed to git.
         if: ${{ github.event_name == 'push' && startsWith(github.ref_name, 'snapshot/') }}
-        run: ./scripts/ui_release.sh --snapshot-version "${{ github.ref_name }}" "${{ github.sha }}"
+        run: ./scripts/ui_release.sh --snapshot-version "${{ github.ref_name }}" "${{ github.sha }}" && cd ./ui && npm install
       - name: Publish snapshot
         ## This step only runs for "snapshot" branches starting with "snapshot/"
         if: ${{ github.event_name == 'push' && startsWith(github.ref_name, 'snapshot/') }}
