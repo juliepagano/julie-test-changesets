@@ -2,8 +2,12 @@
   "name": "my-project",
   "private": true,
   "version": "julie-test-changesets-root",
-  "workspaces": ["ui/*", "backend"],
+  "workspaces": [
+    "ui/*",
+    "backend"
+  ],
   "dependencies": {
+    "@changesets/changelog-github": "^0.4.7",
     "@changesets/cli": "^2.25.2"
   }
 }
