@@ -20,12 +20,9 @@ cross-release:
 bump-version:
 	./scripts/ui_release.sh --bump-version "${VERSION}"
 	cd ui/ && npm install
-<<<<<<< HEAD
 	git add "./ui/package-lock.json" "./**/package.json"
 
 .PHONY: tag
 tag:
 	./scripts/release.sh --tag "${VERSION}"
-=======
 	git add "./ui/package-lock.json" "./**/package.json"
->>>>>>> origin/main
