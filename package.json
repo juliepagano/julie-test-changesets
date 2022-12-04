@@ -1,0 +1,9 @@
+{
+  "name": "my-project",
+  "private": true,
+  "version": "julie-test-changesets-root",
+  "workspaces": ["ui/*", "backend"],
+  "dependencies": {
+    "@changesets/cli": "^2.25.2"
+  }
+}
