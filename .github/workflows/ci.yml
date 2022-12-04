@@ -84,6 +84,10 @@ jobs:
         ## This step only runs for "snapshot" branches starting with "snapshot/"
         if: ${{ github.event_name == 'push' && startsWith(github.ref_name, 'snapshot/') }}
         run: ./scripts/ui_release.sh --publish-snapshot "${{ github.ref_name }}"
+        env:
+          # The setup-node action writes an .npmrc file with this env variable
+          # as the placeholder for the auth token
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Archive npm failure logs
         uses: actions/upload-artifact@v2
         if: failure()
