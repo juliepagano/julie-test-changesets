@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.4.0 / 2022-12-03
+
+- [BUGFIX] Export date to env #10
+
 ## 0.3.0 / 2022-12-03
 
 - [BUGFIX] Try to fix makefile for github release
