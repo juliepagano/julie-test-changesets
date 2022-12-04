@@ -1,6 +1,7 @@
 GO                    ?= go
 VERSION               ?= $(shell cat VERSION)
 GORELEASER_PARALLEL   ?= 0
+DATE                  := $(shell date +%Y-%m-%d)
 
 .PHONY: generate-changelog
 generate-changelog:
@@ -19,4 +20,9 @@ cross-release:
 bump-version:
 	./scripts/ui_release.sh --bump-version "${VERSION}"
 	cd ui/ && npm install
+	git add "./ui/package-lock.json" "./**/package.json"
+
+.PHONY: tag
+tag:
+	./scripts/release.sh --tag "${VERSION}"
 	git add "./ui/package-lock.json" "./**/package.json"
