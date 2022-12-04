@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.5.0 / 2022-12-04
+
+- [BUGFIX] Cutting a version to test npm issues
+
 ## 0.4.0 / 2022-12-03
 
 - [BUGFIX] Export date to env #10
