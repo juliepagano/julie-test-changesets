@@ -68,3 +68,37 @@ jobs:
           # The setup-node action writes an .npmrc file with this env variable
           # as the placeholder for the auth token
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  build:
+    name: "go and github release"
+    needs: "build-frontend"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/setup_environment
+        with:
+          enable_go: true
+      - name: Download react build
+        uses: actions/download-artifact@v3
+        with:
+          name: ui-libs
+          path: ui
+      - name: Extract Changelog
+        run: make generate-changelog
+      - name: install goreleaser
+        uses: goreleaser/goreleaser-action@v3
+        with:
+          distribution: goreleaser
+          install-only: true
+      - name: Build Go binaries
+        run: make cross-build
+      - name: Publish Release
+        if: ${{ github.event_name == 'push' && startsWith(github.ref_name, 'v') }}
+        run: make cross-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
