@@ -71,9 +71,15 @@ function bumpVersion() {
   if [[ "${version}" == v* ]]; then
     version="${version:1}"
   fi
+  pwd
   # upgrade the @julie-test-changesets/* dependencies on all packages
   for workspace in ${workspaces}; do
-    sed -E -i "" "s|(\"@julie-test-changesets/.+\": )\".+\"|\1\"\^${version}\"|" "${workspace}"/package.json
+    # sed -i syntax is different on mac and linux
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+      sed -E -i "" "s|(\"@julie-test-changesets/.+\": )\".+\"|\1\"\^${version}\"|" "${workspace}"/package.json
+    else
+      sed -E -i "s|(\"@julie-test-changesets/.+\": )\".+\"|\1\"\^${version}\"|" "${workspace}"/package.json
+    fi
   done
 
   # increase the version on all packages
@@ -83,7 +89,8 @@ function bumpVersion() {
 function snapshotVersion() {
   branch="${1}"
   sha="${2}"
-  snapshotName="0.0.0-$(echo "${branch}" | sed -E  's/.*\///')-${sha}"
+  shortSha=$(echo $sha | cut -c 1-7)
+  snapshotName="0.0.0-$(echo "${branch}" | sed -E  's/.*\///')-${shortSha}"
   echo "Creating snapshot ${snapshotName}"
   echo "${snapshotName}" > ../VERSION
   bumpVersion "${snapshotName}"
