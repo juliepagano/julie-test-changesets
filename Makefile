@@ -1,0 +1,16 @@
+GO                    ?= go
+VERSION               ?= $(shell cat VERSION)
+GORELEASER_PARALLEL   ?= 0
+
+.PHONY: generate-changelog
+generate-changelog:
+	$(GO) run ./scripts/generate-changelog/generate-changelog.go --version="${VERSION}"
+
+## Build go 
+.PHONY: cross-build
+cross-build: ## Cross build binaries for all platforms (Use "make build" in development)
+	goreleaser build --snapshot --rm-dist --parallelism ${GORELEASER_PARALLEL}
+
+.PHONY: cross-release
+cross-release:
+	goreleaser release --rm-dist --parallelism ${GORELEASER_PARALLEL} --release-notes GENERATED_CHANGELOG.md

@@ -1,0 +1,25 @@
+builds:
+  - id: "backend"
+    main: ./backend/main.go
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+archives:
+  - id: "default"
+    builds:
+      - "backend"
+    format: "tar.gz"
+    files:
+      - LICENSE
+      - README.md
+release:
+  github:
+    owner: juliepagano
+    name: julie-test-changesets
+  ids:
+    - "default"
+  prerelease: auto
+  name_template: "{{ .Version }} / {{ .Env.DATE }}"
