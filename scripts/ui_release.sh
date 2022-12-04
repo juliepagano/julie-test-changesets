@@ -75,8 +75,13 @@ function bumpVersion() {
   # upgrade the @julie-test-changesets/* dependencies on all packages
   for workspace in ${workspaces}; do
     echo "${workspace}"/package.json
-    cat "${workspace}"/package.json
-    sed -E -i "" "s|(\"@julie-test-changesets/.+\": )\".+\"|\1\"\^${version}\"|" "${workspace}"/package.json
+
+    # sed -i syntax is different on mac and linux
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+      sed -E -i "" "s|(\"@julie-test-changesets/.+\": )\".+\"|\1\"\^${version}\"|" "${workspace}"/package.json
+    else
+      sed -E -i "s|(\"@julie-test-changesets/.+\": )\".+\"|\1\"\^${version}\"|" "${workspace}"/package.json
+    fi
   done
 
   # increase the version on all packages
