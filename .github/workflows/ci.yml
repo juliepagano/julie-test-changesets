@@ -32,7 +32,7 @@ jobs:
       - name: Snapshot
         ## This step only runs for "snapshot" branches starting with "snapshot/"
         if: ${{ github.event_name == 'push' && startsWith(github.ref_name, 'snapshot/') }}
-        run: ./scripts/ui_release.sh --snapshot-version "${{ github.ref_name }}" "{{github.sha}}"
+        run: ./scripts/ui_release.sh --snapshot-version "${{ github.ref_name }}" "{{ github.sha }}"
 
       - name: Install UI deps
         run: cd ./ui && npm install
