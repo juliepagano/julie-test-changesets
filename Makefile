@@ -14,3 +14,9 @@ cross-build: ## Cross build binaries for all platforms (Use "make build" in deve
 .PHONY: cross-release
 cross-release:
 	goreleaser release --rm-dist --parallelism ${GORELEASER_PARALLEL} --release-notes GENERATED_CHANGELOG.md
+
+.PHONY: bump-version
+bump-version:
+	./scripts/ui_release.sh --bump-version "${VERSION}"
+	cd ui/ && npm install
+	git add "./ui/package-lock.json" "./**/package.json"
