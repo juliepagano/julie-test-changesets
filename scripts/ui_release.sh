@@ -80,6 +80,37 @@ function bumpVersion() {
   npm version "${version}" --workspaces
 }
 
+function snapshotVersion() {
+  branch="${1}"
+  sha="${2}"
+  snapshotName="0.0.0-$(echo "${branch}" | sed -E  's/.*\///')-${sha}"
+  echo "Creating snapshot ${snapshotName}"
+  echo "${snapshotName}" > ../VERSION
+  bumpVersion "${snapshotName}"
+  checkPackage "${snapshotName}"
+}
+
+function publishSnapshot() {
+  branch="${1}"
+  tagName="$(echo "${branch}" | sed -E  's/.*\///')"
+
+  if [[ -z "${tagName}" ]]; then 
+    echo "Missing tag name for snapshot."
+    exit 1
+  fi
+
+  echo "Publishing snapshot to tag ${tagName}"
+  cmd="npm publish --access public --tag ${tagName}"
+  for workspace in ${workspaces}; do
+    # package "app" is private so we shouldn't try to publish it.
+    if [[ "${workspace}" != "app" ]]; then
+      cd "${workspace}"
+      eval "${cmd}"
+      cd ../
+    fi
+  done
+}
+
 if [[ "$1" == "--copy" ]]; then
   copy
 fi
@@ -99,3 +130,13 @@ fi
 if [[ $1 == "--clean" ]]; then
   clean
 fi
+
+if [[ $1 == "--snapshot-version" ]]; then
+  snapshotVersion "${@:2}"  "${@:3}"
+fi
+
+if [[ $1 == "--publish-snapshot" ]]; then
+  publishSnapshot "${@:2}"
+fi
+
+
