@@ -93,9 +93,9 @@ function getBranchSnapshotName() {
 }
 
 function snapshotVersion() {
-  version="${1}"
-  branch="${2}"
-  sha="${3}"
+  version="0.0.0"
+  branch="${1}"
+  sha="${2}"
   shortSha=$(echo $sha | cut -c 1-7)
 
   branchSnapshotName=$(getBranchSnapshotName $branch)
@@ -105,7 +105,7 @@ function snapshotVersion() {
     exit 1
   fi
 
-  snapshotName="snap-${version}-${branchSnapshotName}-${shortSha}"
+  snapshotName="${version}-${branchSnapshotName}-${shortSha}"
   echo "Creating snapshot ${snapshotName}"
 
   # Save snapshot version
@@ -178,7 +178,7 @@ if [[ $1 == "--clean" ]]; then
 fi
 
 if [[ $1 == "--snapshot-version" ]]; then
-  snapshotVersion "${@:2}" "${@:3}"  "${@:4}"
+  snapshotVersion "${@:2}" "${@:3}"
 fi
 
 if [[ $1 == "--publish-snapshot" ]]; then

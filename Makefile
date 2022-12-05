@@ -24,10 +24,6 @@ bump-version:
 	cd ui/ && npm install
 	git add "./ui/package-lock.json" "./**/package.json"
 
-.PHONY: snapshot-version
-snapshot-version:
-	./scripts/ui_release.sh --snapshot-version  "${VERSION}" "$(branch)" "$(sha)"
-
 .PHONY: tag
 tag:
 	./scripts/release.sh --tag "${VERSION}"
