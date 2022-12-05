@@ -10,5 +10,5 @@ jobs:
       - uses: ./.github/actions/setup_environment
         with:
           enable_npm: true
-      - name: Clean up
+      - name: Remove npm snapshot tag
         run: ./scripts/ui_release.sh --remove-snapshot "${{ github.event.ref }}"
