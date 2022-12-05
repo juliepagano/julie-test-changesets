@@ -86,10 +86,19 @@ function bumpVersion() {
   npm version "${version}" --workspaces
 }
 
-# Extracts the name after `snapshot/` prefix in branches
+# Validates branch name and extracts snapshot name from it.
 function getBranchSnapshotName() {
   branch="${1}"
-  echo "snapshot-$(echo "${branch}" | sed -E  's/snapshot\///')"
+
+  snapshotRegex="^snapshot\/[-a-zA-Z0-9]+$"
+
+  if [[ ! $branch =~ $snapshotRegex ]]; then 
+    echo "Snapshot branch '${branch}' must start with 'snapshot/' and end with a kebab-case name (e.g. 'snapshot/my-feature')." 1>&2
+    exit 1
+  fi
+
+  # Replace "/"" with "-"
+  echo "$(echo "${branch}" | sed -E  's/\//-/')"
 }
 
 function snapshotVersion() {
@@ -99,12 +108,6 @@ function snapshotVersion() {
   shortSha=$(echo $sha | cut -c 1-7)
 
   branchSnapshotName=$(getBranchSnapshotName $branch)
-
-  if [[ -z "${branchSnapshotName}" ]]; then 
-    echo "Missing tag name for snapshot."
-    exit 1
-  fi
-
   snapshotName="${version}-${branchSnapshotName}-${shortSha}"
   echo "Creating snapshot ${snapshotName}"
 
@@ -118,11 +121,6 @@ function snapshotVersion() {
 function publishSnapshot() {
   branch="${1}"
   tagName=$(getBranchSnapshotName $branch)
-
-  if [[ -z "${tagName}" ]]; then 
-    echo "Missing tag name for snapshot."
-    exit 1
-  fi
 
   echo "Publishing snapshot to tag ${tagName}"
   cmd="npm publish --access public --tag ${tagName}"
