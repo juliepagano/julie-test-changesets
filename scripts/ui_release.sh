@@ -86,20 +86,38 @@ function bumpVersion() {
   npm version "${version}" --workspaces
 }
 
-function snapshotVersion() {
+# Extracts the name after `snapshot/` prefix in branches
+function getBranchSnapshotName() {
   branch="${1}"
-  sha="${2}"
+  echo "snapshot-$(echo "${branch}" | sed -E  's/snapshot\///')"
+}
+
+function snapshotVersion() {
+  version="${1}"
+  branch="${2}"
+  sha="${3}"
   shortSha=$(echo $sha | cut -c 1-7)
-  snapshotName="0.0.0-$(echo "${branch}" | sed -E  's/.*\///')-${shortSha}"
+
+  branchSnapshotName=$(getBranchSnapshotName $branch)
+
+  if [[ -z "${branchSnapshotName}" ]]; then 
+    echo "Missing tag name for snapshot."
+    exit 1
+  fi
+
+  snapshotName="${version}-${branchSnapshotName}-${shortSha}"
   echo "Creating snapshot ${snapshotName}"
+
+  # Save snapshot version
   echo "${snapshotName}" > ../VERSION
+
   bumpVersion "${snapshotName}"
   checkPackage "${snapshotName}"
 }
 
 function publishSnapshot() {
   branch="${1}"
-  tagName="$(echo "${branch}" | sed -E  's/.*\///')"
+  tagName=$(getBranchSnapshotName $branch)
 
   if [[ -z "${tagName}" ]]; then 
     echo "Missing tag name for snapshot."
@@ -120,7 +138,7 @@ function publishSnapshot() {
 
 function removeSnapshot() {
   branch="${1}"
-  tagName="$(echo "${branch}" | sed -E  's/.*\///')"
+  tagName=$(getBranchSnapshotName $branch)
 
   if [[ -z "${tagName}" ]]; then 
     echo "Missing tag name for snapshot."
@@ -160,7 +178,7 @@ if [[ $1 == "--clean" ]]; then
 fi
 
 if [[ $1 == "--snapshot-version" ]]; then
-  snapshotVersion "${@:2}"  "${@:3}"
+  snapshotVersion "${@:2}" "${@:3}"  "${@:4}"
 fi
 
 if [[ $1 == "--publish-snapshot" ]]; then
