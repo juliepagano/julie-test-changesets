@@ -8,6 +8,14 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' || github.ref_name != 'main' }}
 
 jobs:
+  validate-pr:
+    name: "validate-pr"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate title
+        if: ${{ github.event_name == 'pull_request' }}
+        run: echo the title of your PR is ${{ github.event.pull_request.title }}
+
   build-frontend:
     name: "build-frontend"
     runs-on: ubuntu-latest
