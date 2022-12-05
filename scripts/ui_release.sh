@@ -105,7 +105,7 @@ function snapshotVersion() {
     exit 1
   fi
 
-  snapshotName="0.0.0-${branchSnapshotName}-${shortSha}"
+  snapshotName="snap-${version}-${branchSnapshotName}-${shortSha}"
   echo "Creating snapshot ${snapshotName}"
 
   # Save snapshot version
