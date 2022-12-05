@@ -2,7 +2,7 @@ name: Branch Deleted
 on: delete
 jobs:
   remove-snapshot-tag:
-    if: ${{ github.event.ref_type == 'branch'  && startsWith(github.ref_name, 'snapshot/') }}
+    if: ${{ github.event.ref_type == 'branch'  && startsWith(github.event.ref, 'snapshot/') }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -11,4 +11,4 @@ jobs:
         with:
           enable_npm: true
       - name: Clean up
-        run: ./scripts/ui_release.sh --remove-snapshot "${{ github.ref_name }}"
+        run: ./scripts/ui_release.sh --remove-snapshot "${{ github.event.ref }}"
