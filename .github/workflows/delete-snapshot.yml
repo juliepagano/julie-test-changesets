@@ -12,3 +12,7 @@ jobs:
           enable_npm: true
       - name: Remove npm snapshot tag
         run: ./scripts/ui_release.sh --remove-snapshot "${{ github.event.ref }}"
+        env:
+          # The setup-node action writes an .npmrc file with this env variable
+          # as the placeholder for the auth token
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
