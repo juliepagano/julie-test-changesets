@@ -118,6 +118,27 @@ function publishSnapshot() {
   done
 }
 
+function removeSnapshot() {
+  branch="${1}"
+  tagName="$(echo "${branch}" | sed -E  's/.*\///')"
+
+  if [[ -z "${tagName}" ]]; then 
+    echo "Missing tag name for snapshot."
+    exit 1
+  fi
+
+  echo "Removing snapshot for tag ${tagName}"
+  cmd="npm publish --access public --tag ${tagName}"
+  for workspace in ${workspaces}; do
+    # package "app" is private so we shouldn't try to publish it.
+    if [[ "${workspace}" != "app" ]]; then
+      cd "${workspace}"
+      eval "npm dist-tag rm @julie-test-changesets/${workspace} ${tagName}"
+      cd ../
+    fi
+  done
+}
+
 if [[ "$1" == "--copy" ]]; then
   copy
 fi
@@ -144,6 +165,10 @@ fi
 
 if [[ $1 == "--publish-snapshot" ]]; then
   publishSnapshot "${@:2}"
+fi
+
+if [[ $1 == "--remove-snapshot" ]]; then
+  removeSnapshot "${@:2}"
 fi
 
 
