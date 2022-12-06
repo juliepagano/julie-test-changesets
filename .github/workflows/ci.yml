@@ -82,7 +82,8 @@ jobs:
         ## need to ensure the different `package.json` files contain the correct version.
         ## That's why we are running the script again to bump the snapshot version.
         run: |
-          ./scripts/ui_release.sh --snapshot-version "${{ github.ref_name }}" "${{ github.sha }}" && cd ./ui && npm install
+          ./scripts/ui_release.sh --snapshot-version "${{ github.ref_name }}" "${{ github.sha }}"
+          cd ./ui && npm install && cd ..
           ./scripts/ui_release.sh --publish-snapshot "${{ github.ref_name }}"
         env:
           # The setup-node action writes an .npmrc file with this env variable
