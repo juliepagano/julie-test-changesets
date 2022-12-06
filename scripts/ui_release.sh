@@ -9,6 +9,12 @@ cd ui/
 
 files=("../LICENSE" "../CHANGELOG.md")
 workspaces=$(jq -r '.workspaces[]' < package.json)
+publish_workspaces=$(for workspace in ${workspaces}; do 
+  # package "app" is private so we shouldn't try to publish it.
+  if [[ "${workspace}" != "app" ]]; then
+    echo $workspace;
+  fi 
+done)
 
 function copy() {
   for file in "${files[@]}"; do
@@ -26,13 +32,10 @@ function publish() {
   if [[ "${dry_run}" == "dry-run" ]]; then
     cmd+=" --dry-run"
   fi
-  for workspace in ${workspaces}; do
-    # package "app" is private so we shouldn't try to publish it.
-    if [[ "${workspace}" != "app" ]]; then
-      cd "${workspace}"
-      eval "${cmd}"
-      cd ../
-    fi
+  for workspace in ${publish_workspaces}; do
+    cd "${workspace}"
+    eval "${cmd}"
+    cd ../
   done
 }
 
@@ -102,21 +105,26 @@ function getBranchSnapshotName() {
 }
 
 function snapshotVersion() {
+  # Use version 0.0.0 keep snapshots at the bottom of the npm versions UI to 
+  # avoid confusion for consumers of the package. This also helps differentiate
+  # snapshots from the concept of prereleases.
   version="0.0.0"
+  
   branch="${1}"
   sha="${2}"
   shortSha=$(echo $sha | cut -c 1-7)
 
   branchSnapshotName=$(getBranchSnapshotName $branch)
-  snapshotName="${version}-${branchSnapshotName}-${shortSha}"
-  echo "Creating snapshot ${snapshotName}"
+  snapshotVersion="${version}-${branchSnapshotName}-${shortSha}"
+  echo "Creating snapshot ${snapshotVersion}"
 
   # Save snapshot version
-  echo "${snapshotName}" > ../VERSION
+  echo "${snapshotVersion}" > ../VERSION
 
-  bumpVersion "${snapshotName}"
-  checkPackage "${snapshotName}"
+  bumpVersion "${snapshotVersion}"
+  checkPackage "${snapshotVersion}"
 }
+
 
 function publishSnapshot() {
   branch="${1}"
@@ -124,13 +132,10 @@ function publishSnapshot() {
 
   echo "Publishing snapshot to tag ${tagName}"
   cmd="npm publish --access public --tag ${tagName}"
-  for workspace in ${workspaces}; do
-    # package "app" is private so we shouldn't try to publish it.
-    if [[ "${workspace}" != "app" ]]; then
-      cd "${workspace}"
-      eval "${cmd}"
-      cd ../
-    fi
+  for workspace in ${publish_workspaces}; do
+    cd "${workspace}"
+    eval "${cmd}"
+    cd ../
   done
 }
 
@@ -138,20 +143,12 @@ function removeSnapshot() {
   branch="${1}"
   tagName=$(getBranchSnapshotName $branch)
 
-  if [[ -z "${tagName}" ]]; then 
-    echo "Missing tag name for snapshot."
-    exit 1
-  fi
-
   echo "Removing snapshot for tag ${tagName}"
   cmd="npm publish --access public --tag ${tagName}"
-  for workspace in ${workspaces}; do
-    # package "app" is private so we shouldn't try to publish it.
-    if [[ "${workspace}" != "app" ]]; then
-      cd "${workspace}"
-      eval "npm dist-tag rm @julie-test-changesets/${workspace} ${tagName}"
-      cd ../
-    fi
+  for workspace in ${publish_workspaces}; do
+    cd "${workspace}"
+    eval "npm dist-tag rm @julie-test-changesets/${workspace} ${tagName}"
+    cd ../
   done
 }
 
