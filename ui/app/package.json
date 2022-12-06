@@ -3,8 +3,8 @@
   "version": "0.6.1",
   "private": true,
   "dependencies": {
-    "@julie-test-changesets/core": "^0.6.1",
-    "@julie-test-changesets/components": "^0.6.1",
+    "@julie-test-changesets/core": "0.6.1",
+    "@julie-test-changesets/components": "0.6.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
