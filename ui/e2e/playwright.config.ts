@@ -1,11 +1,14 @@
 import type { PlaywrightTestConfig } from '@playwright/test';
 import { devices } from '@playwright/test';
+import path from 'path'
 
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
  */
 // require('dotenv').config();
+
+const IS_CI = process.env.CI
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -35,8 +38,13 @@ const config: PlaywrightTestConfig = {
   use: {
     /* Maximum time each action such as `click()` can take. Defaults to 0 (no limit). */
     actionTimeout: 0,
+
     /* Base URL to use in actions like `await page.goto('/')`. */
-    // baseURL: 'http://localhost:3000',
+    // npm installs and runs web server directly in the docker container in CI,
+    // so can point at localhost. Only runs playwright in a container when 
+    // working locally (to avoid permissions issues and re-running npm install
+    // again), so need to use host.docker.internal to talk to localhost.
+    baseURL: IS_CI ? 'http://localhost:3000' : 'http://host.docker.internal:3000',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
@@ -98,10 +106,14 @@ const config: PlaywrightTestConfig = {
   // outputDir: 'test-results/',
 
   /* Run your local dev server before starting the tests */
-  // webServer: {
-  //   command: 'npm run start',
-  //   port: 3000,
-  // },
+  // Only do in CI. Otherwise, we run separately locally to avoid frustrations
+  // with docker.
+  webServer: IS_CI ? {
+    command: 'npm run start',
+    reuseExistingServer: true,
+    port: 3000,
+    cwd: path.resolve(__dirname, '../')
+  } : undefined,
 };
 
 export default config;
