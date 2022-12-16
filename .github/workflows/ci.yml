@@ -62,6 +62,7 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
       - name: Run Playwright tests
+        uses: docker://mcr.microsoft.com/playwright:v1.28.0-focal
         run: cd ./ui && npm run e2e
       - uses: actions/upload-artifact@v3
         if: always()
