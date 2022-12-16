@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.8.0 / 2022-12-16
+
+- test release
+
 ## 0.7.0 / 2022-12-06
 
 - switch to exact internal dependencies
