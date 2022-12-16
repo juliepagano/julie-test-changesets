@@ -1,12 +1,12 @@
 {
   "name": "@julie-test-changesets/components",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "",
   "module": "dist/index.js",
   "main": "dist/cjs/index.js",
   "types": "dist/index.d.ts",
   "dependencies": {
-    "@julie-test-changesets/core": "0.8.0"
+    "@julie-test-changesets/core": "0.8.1"
   },
   "devDependencies": {},
   "scripts": {
