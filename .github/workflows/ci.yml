@@ -61,8 +61,6 @@ jobs:
         run: cd ./ui && npm install
       - name: Run app in dev mode
         run: cd ./ui && npm run start &
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
       - name: Run Playwright tests
         run: cd ./ui && npm run e2e
       - uses: actions/upload-artifact@v3
