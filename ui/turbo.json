@@ -12,6 +12,10 @@
       // Make sure all packages are built once before starting watch mode
       "dependsOn": ["^build"],
       "cache": false
+    },
+    "e2e": {
+      "dependsOn": [],
+      "outputs": ["test-results/**", "playwright-report/**"]
     }
   }
 }

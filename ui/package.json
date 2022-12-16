@@ -5,13 +5,15 @@
   "workspaces": [
     "app",
     "components",
-    "core"
+    "core",
+    "e2e"
   ],
   "scripts": {
     "start": "turbo run start",
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
-    "lint": "turbo run lint"
+    "lint": "turbo run lint",
+    "e2e": "turbo run e2e"
   },
   "repository": {
     "type": "git",
