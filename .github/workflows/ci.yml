@@ -66,7 +66,9 @@ jobs:
         with:
           enable_npm: true
       - name: Debug git
-        run: git --version && git status
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git --version && git status
       - name: Install UI deps
         run: cd ./ui && npm install
       - name: Run app in dev mode
