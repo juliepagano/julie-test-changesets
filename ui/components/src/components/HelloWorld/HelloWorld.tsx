@@ -6,7 +6,7 @@ export const HelloWorld = () => {
 
   return (
     <div>
-      <h1>Hello {HELLO_TARGET}!</h1>
+      <h1>Hello <span data-maske2e>{HELLO_TARGET}</span>!</h1>
       <p>It is {time.toLocaleTimeString()} on {time.toLocaleDateString()}.</p>
       {timeZone && <p>Your time zone is: {timeZone}.</p>}
     </div>

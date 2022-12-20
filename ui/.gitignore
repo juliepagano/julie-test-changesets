@@ -26,3 +26,5 @@ dist
 
 # Ignore turborepo cache
 .turbo
+
+.DS_Store

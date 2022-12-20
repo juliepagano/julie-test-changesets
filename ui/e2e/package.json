@@ -3,7 +3,9 @@
   "version": "0.7.0",
   "private": true,
   "scripts": {
-    "e2e": "playwright test"
+    "e2e": "playwright test",
+    "e2e:updateSnaps": "npm run e2e -- --update-snapshots",
+    "e2e:docker": "docker run --rm --network host -v $(pwd):/work/ -w /work/ -it mcr.microsoft.com/playwright:v1.28.0-focal"
   },
   "devDependencies": {
     "@playwright/test": "^1.28.1"

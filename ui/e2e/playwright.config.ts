@@ -56,6 +56,8 @@ const config: PlaywrightTestConfig = {
       name: 'chromium',
       use: {
         ...devices['Desktop Chrome'],
+        locale: 'en-US',
+        timezoneId: 'America/Los_Angeles'
       },
     },
 
