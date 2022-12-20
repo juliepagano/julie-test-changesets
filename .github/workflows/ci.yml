@@ -24,6 +24,8 @@ jobs:
         with:
           enable_npm: true
 
+      - name: Debug git
+        run: git --version && git status
       - name: Check Tag
         ## This step is verifying that the tag follow the semver
         ## It is only triggered when a tag is created
@@ -60,14 +62,33 @@ jobs:
       image: mcr.microsoft.com/playwright:v1.28.0-focal
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
       - uses: ./.github/actions/setup_environment
         with:
           enable_npm: true
+      - name: Debug git
+        # https://github.com/actions/checkout/issues/766
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git --version && git status
       - name: Install UI deps
         run: cd ./ui && npm install
       - name: Run app in dev mode
         run: cd ./ui && npm run start &
-      - name: Run Playwright tests
+      - name: Run Playwright tests and update snapshots
+        if: ${{ github.event_name == 'pull_request' }}
+        run: |
+          cd ./ui
+          npm run e2e:updateSnapshots 
+          cd ..
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add ui/e2e/tests
+          git commit -m "Update e2e snapshots"
+          git push
+      - name: Run Playwright tests and fail on snapshot differences
+        if: ${{ github.event_name == 'push' }}
         run: cd ./ui && npm run e2e
       - uses: actions/upload-artifact@v3
         if: always()
