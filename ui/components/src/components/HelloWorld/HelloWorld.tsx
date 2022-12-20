@@ -10,6 +10,9 @@ export const HelloWorld = () => {
       <p>It is {time.toLocaleTimeString()} on {time.toLocaleDateString()}.</p>
       {timeZone && <p>Your time zone is: {timeZone}.</p>}
       <strong>I like testing things! 😀</strong>
+      <div>
+        Look at my cool new emojis: 💃💃💃
+      </div>
     </div>
   )
 }
