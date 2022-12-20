@@ -67,7 +67,11 @@ jobs:
         run: cd ./ui && npm install
       - name: Run app in dev mode
         run: cd ./ui && npm run start &
-      - name: Run Playwright tests
+      - name: Run Playwright tests and update snapshots
+        if: ${{ github.event_name == 'pull_request' }}
+        run: cd ./ui && npm run e2e:updateSnapshots
+      - name: Run Playwright tests and fail on snapshot differences
+        if: ${{ github.event_name == 'push' }}
         run: cd ./ui && npm run e2e
       - uses: actions/upload-artifact@v3
         if: always()
