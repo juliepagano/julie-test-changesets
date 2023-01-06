@@ -75,7 +75,6 @@ jobs:
       - name: Run app in dev mode
         run: cd ./ui && npm run start &
       - name: Run e2e tests with happo
-        if: ${{ github.event_name == 'push' }}
         run: cd ./ui && npm run e2e:happo
         env:
           HAPPO_API_KEY: ${{ secrets.HAPPO_API_KEY }}
