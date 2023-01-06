@@ -1,7 +1,16 @@
 import { test, expect } from '@playwright/test';
+import happoPlaywright from 'happo-playwright'
 
 // Pick the new/fake "now" for you test pages.
 const fakeNow = new Date("March 14 2042 13:37:11").valueOf();
+
+test.beforeEach(async ({ context }) => {
+  await happoPlaywright.init(context);
+});
+
+test.afterEach(async () => {
+  await happoPlaywright.finish();
+});
 
 test('homepage has title', async ({ page }) => {
   // Update the Date accordingly in your test pages
@@ -25,9 +34,14 @@ test('homepage has title', async ({ page }) => {
 
   await page.goto('/');
 
-  await expect(page).toHaveScreenshot({
-    mask: [page.locator('[data-maske2e]')]
-  })
+  // await expect(page).toHaveScreenshot({
+  //   mask: [page.locator('[data-maske2e]')]
+  // })
+
+  await happoPlaywright.screenshot(page, page.locator('body'), {
+    component: 'Example Page',
+    variant: 'default',
+  });
 
   const heading = page.getByRole('heading', {
     level: 1

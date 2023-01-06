@@ -6,7 +6,7 @@ import path from 'path'
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
  */
-// require('dotenv').config();
+require('dotenv').config();
 
 const IS_CI = process.env.CI
 
@@ -44,7 +44,7 @@ const config: PlaywrightTestConfig = {
     // so can point at localhost. Only runs playwright in a container when 
     // working locally (to avoid permissions issues and re-running npm install
     // again), so need to use host.docker.internal to talk to localhost.
-    baseURL: IS_CI ? 'http://localhost:3000' : 'http://host.docker.internal:3000',
+    baseURL: 'http://localhost:3000',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
