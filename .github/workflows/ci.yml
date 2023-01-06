@@ -71,7 +71,7 @@ jobs:
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git --version && git status
       - name: Install UI deps
-        run: cd ./ui && npm install
+        run: cd ./ui && npm install && npx playwright install --with-deps chromium
       - name: Run app in dev mode
         run: cd ./ui && npm run start &
       - name: Run e2e tests with happo
