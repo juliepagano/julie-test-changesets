@@ -1,0 +1,6 @@
+{
+  "devDependencies": {
+    "happo-plugin-typescript": "^1.0.0",
+    "happo.io": "^8.3.1"
+  }
+}
