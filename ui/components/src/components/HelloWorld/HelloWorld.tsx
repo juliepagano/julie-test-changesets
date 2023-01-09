@@ -5,7 +5,7 @@ export const HelloWorld = () => {
   const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
 
   return (
-    <div style={{color: 'red'}}>
+    <div style={{color: 'purple'}}>
       <h1>Hello <span data-happo-hide>{HELLO_TARGET}</span>!</h1>
       <p>It is {time.toLocaleTimeString()} on {time.toLocaleDateString()}.</p>
       {timeZone && <p>Your time zone is: {timeZone}.</p>}
