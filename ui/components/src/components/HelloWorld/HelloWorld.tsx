@@ -11,7 +11,7 @@ export const HelloWorld = () => {
       {timeZone && <p>Your time zone is: {timeZone}.</p>}
       <strong>I like testing things! 😀</strong>
       <div>
-        Look at my cool emojis: 🎉🎉🎉
+        Look at my cool emojis: 🎂🎂🎂
       </div>
     </div>
   )
