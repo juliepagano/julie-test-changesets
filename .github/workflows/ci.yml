@@ -75,6 +75,7 @@ jobs:
       - name: Run app in dev mode
         run: cd ./ui && npm run start &
       - name: Run e2e tests with happo
+        if: ${{ !startsWith(github.ref_name, 'ignore-snap-' }}
         run: cd ./ui && npm run e2e:updateSnapshots
         env:
           HAPPO_API_KEY: ${{ secrets.HAPPO_API_KEY }}
