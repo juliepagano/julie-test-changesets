@@ -80,8 +80,8 @@ jobs:
         run: cd ./ui && npm install && npx playwright install --with-deps chromium
       - name: Run app in dev mode
         run: cd ./ui && npm run start &
-      - name: Run e2e tests with percy
-        if: ${{ !contains(github.event.commits[0].message, 'ignore-snap-') }}
+      - name: Run e2e tests with happo
+        if: ${{ !contains(github.event.pull_request.title, 'ignore-snap') && !contains(github.event.head_commit.message, 'ignore-snap')}}
         run: cd ./ui && npm run e2e:updateSnapshots
         env:
           PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
