@@ -84,8 +84,7 @@ jobs:
         if: ${{ !contains(github.event.pull_request.title, 'ignore-snap') && !contains(github.event.head_commit.message, 'ignore-snap')}}
         run: cd ./ui && npm run e2e:updateSnapshots
         env:
-          HAPPO_API_KEY: ${{ secrets.HAPPO_API_KEY }}
-          HAPPO_API_SECRET: ${{ secrets.HAPPO_API_SECRET }}
+          PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
       - uses: actions/upload-artifact@v3
         if: always()
         with:
