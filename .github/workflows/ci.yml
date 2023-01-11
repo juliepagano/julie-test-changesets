@@ -70,6 +70,10 @@ jobs:
         run: |
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git --version && git status
+      - name: echo git actions
+        run: |
+          echo '${{ github.event.head_commit.message }}'
+          echo '${{ github.event.commits[0].message }}'
       - name: Install UI deps
         run: cd ./ui && npm install && npx playwright install --with-deps chromium
       - name: Run app in dev mode
