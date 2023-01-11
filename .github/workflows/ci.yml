@@ -80,12 +80,11 @@ jobs:
         run: cd ./ui && npm install && npx playwright install --with-deps chromium
       - name: Run app in dev mode
         run: cd ./ui && npm run start &
-      - name: Run e2e tests with happo
+      - name: Run e2e tests with percy
         if: ${{ !contains(github.event.commits[0].message, 'ignore-snap-') }}
         run: cd ./ui && npm run e2e:updateSnapshots
         env:
-          HAPPO_API_KEY: ${{ secrets.HAPPO_API_KEY }}
-          HAPPO_API_SECRET: ${{ secrets.HAPPO_API_SECRET }}
+          PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
       - uses: actions/upload-artifact@v3
         if: always()
         with:

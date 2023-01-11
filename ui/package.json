@@ -14,7 +14,7 @@
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
     "e2e": "npm run e2e -w e2e",
-    "e2e:updateSnapshots": "npm run e2e:happo -w e2e"
+    "e2e:updateSnapshots": "npm run e2e:percy -w e2e"
   },
   "repository": {
     "type": "git",
